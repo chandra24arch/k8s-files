@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo2img-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo2img
+  template:
+    metadata:
+      labels:
+        app: demo2img
+    spec:
+      containers:
+      - name: demo2img-container
+        image: kvchandra/demo1newimg:latest
+        ports:
+        - containerPort: 8080
+        env:  # Add environment variables if required
+        - name: ENV_VAR_NAME
+          value: "value"
+        livenessProbe:  # Optional: Check if the container is running
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:  # Optional: Check if the container is ready to serve traffic
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:  # Optional: Add resource limits
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo2img-service
+spec:
+  selector:
+    app: demo2img
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+

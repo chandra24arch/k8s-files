@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tomdep1
+  name: tomdep1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tomdep1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: tomdep1
+    spec:
+      containers:
+      - image: kvchandra/tomcat9-ubuntu
+        name: tomcat9-ubuntu
+        ports:
+        - containerPort: 9090
+        resources: {}
+status: {}
